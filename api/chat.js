@@ -1,14 +1,41 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end("Method Not Allowed");
 
-  const GROQ_API_KEY = process.env.GROQ_API_KEY;
+ // CORS headers
+  res.setHeader("Access-Control-Allow-Origin", "https://amitheai.github.io");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  try {
+  // Respond to preflight
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  // Parse body if needed (for Vercel Node API, not Next.js)
+  if (!req.body || typeof req.body === "string") {
+    try {
+      req.body = JSON.parse(req.body || "{}");
+    } catch (e) {
+      return res.status(400).json({ error: "Invalid JSON" });
+    }
+  }
+
+  const { messages } = req.body;
+  if (!messages) {
+    return res.status(400).json({ error: "No messages provided." });
+  }
+
+
+  const apiKey = 
+process.env.GROQ_API_KEY;
+return res.status(500).json({ error: "OpenAI API key not configured." });
+  }
+ 
     const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${GROQ_API_KEY}`,
+        "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: "meta-llama/llama-4-scout-17b-16e-instruct",
