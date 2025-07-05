@@ -42,7 +42,7 @@ export default async function handler(req, res) {
     }),
   });*/
 body: JSON.stringify({
-  model: "gpt-4o", // Switch to GPT-4o
+  model: "gpt-4.1", // Switch to GPT-4o
   messages,
   max_tokens: 256,
   temperature: 0.8,
