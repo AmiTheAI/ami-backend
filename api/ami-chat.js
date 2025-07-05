@@ -34,20 +34,14 @@ export default async function handler(req, res) {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${apiKey}`,
     },
-    /*body: JSON.stringify({
+    body: JSON.stringify({
       model: "gpt-3.5-turbo",
       messages,
       max_tokens: 256,
       temperature: 0.8,
     }),
-  });*/
-body: JSON.stringify({
-  model: "gpt-4.1", // Switch to GPT-4o
-  messages,
-  max_tokens: 256,
-  temperature: 0.8,
-}),
   });
+
   const data = await response.json();
   if (!response.ok) {
     return res.status(response.status).json({ error: data });
