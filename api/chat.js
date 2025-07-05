@@ -19,9 +19,9 @@ export default async function handler(req, res) {
     });
 
     const data = await groqRes.json();
-    res.status(200).json(data);
+    res.status(200).json(data);  // ✅ respond to frontend
   } catch (err) {
-    console.error(err);
+    console.error("Groq API error:", err);
     res.status(500).json({ error: "Server error calling Groq." });
   }
 }
