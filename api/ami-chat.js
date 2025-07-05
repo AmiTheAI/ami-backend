@@ -1,14 +1,22 @@
 export default async function handler(req, res) {
-  // --- Add these lines at the top ---
+  // CORS headers
   res.setHeader("Access-Control-Allow-Origin", "https://amitheai.github.io");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
+  // Respond to preflight
   if (req.method === "OPTIONS") {
-    // Respond to preflight request
     return res.status(200).end();
   }
-  // ...rest of your handler code...
+
+  // Parse body if needed (for Vercel Node API, not Next.js)
+  if (!req.body || typeof req.body === "string") {
+    try {
+      req.body = JSON.parse(req.body || "{}");
+    } catch (e) {
+      return res.status(400).json({ error: "Invalid JSON" });
+    }
+  }
 
   const { messages } = req.body;
   if (!messages) {
@@ -34,8 +42,9 @@ export default async function handler(req, res) {
     }),
   });
 
-const data = await response.json();
-if (!response.ok) {
-  return res.status(response.status).json({ error: data });
+  const data = await response.json();
+  if (!response.ok) {
+    return res.status(response.status).json({ error: data });
+  }
+  res.status(200).json(data);
 }
-res.status(200).json(data)
