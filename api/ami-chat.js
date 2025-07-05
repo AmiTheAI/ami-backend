@@ -47,6 +47,7 @@ body: JSON.stringify({
   max_tokens: 256,
   temperature: 0.8,
 }),
+  });
   const data = await response.json();
   if (!response.ok) {
     return res.status(response.status).json({ error: data });
